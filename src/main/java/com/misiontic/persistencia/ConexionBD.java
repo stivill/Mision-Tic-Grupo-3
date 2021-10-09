@@ -16,7 +16,7 @@ public class ConexionBD {
     
     private String DB_driver = "";
     private String url = "";
-    private String db = "";
+    private String db = "tienda_virtual";
     private String host = "";
     private String username = "";
     private String password = "";
@@ -28,7 +28,7 @@ public class ConexionBD {
     
     
     public ConexionBD(){
-       DB_driver = "com.mysql.jdbc.Driver" ;
+       DB_driver = "com.mysql.cj.jdbc.Driver" ;
        host = "localhost:3306";
        url = "jdbc:mysql://" + host + "/" + db;
        username = "root";
@@ -65,8 +65,11 @@ public class ConexionBD {
         try {
             stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             rs = stmt.executeQuery(sentencia);
-        }  catch (Exception ex){            
+        }  catch (SQLException sqlex){            
+        } catch (RuntimeException rex){
+        } catch (Exception ex){
         }
+    
         return rs;
     }
     
@@ -76,7 +79,7 @@ public class ConexionBD {
         try {
             stmt = con.createStatement();
             stmt.execute(sentencia);            
-        } catch (SQLException | RuntimeException sqlex) {
+        } catch (Exception sqlex) {
             System.out.println("ERROR RUTINA: " + sqlex);
             return false;
         }
@@ -89,7 +92,7 @@ public class ConexionBD {
         try {
             stmt = con.createStatement();
             stmt.execute(sentencia);            
-        } catch (SQLException | RuntimeException sqlex) {
+        } catch (Exception sqlex) {
             System.out.println("ERROR RUTINA: " + sqlex);
             return false;
         }
@@ -102,7 +105,7 @@ public class ConexionBD {
         try {
             stmt = con.createStatement();
             stmt.execute(sentencia);            
-        } catch (SQLException | RuntimeException sqlex) {
+        } catch (Exception sqlex) {
             System.out.println("ERROR RUTINA: " + sqlex);
             return false;
         }

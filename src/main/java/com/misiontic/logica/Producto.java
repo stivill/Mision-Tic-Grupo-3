@@ -88,8 +88,9 @@ public class Producto {
     public boolean guardarProducto() {
         System.out.println("bien");
         ConexionBD conexion = new ConexionBD();
-        String sentencia = "INSERT INTO producto(nombre,categoria,cantidad,precio)"
-                +"VALUES('"+this.nombre+"','"+this.categoria+"',"+this.cantidad+","+this.precio+");";
+        String sentencia = "INSERT INTO producto(codigo,nombre,categoria,cantidad,precio)"
+                +"VALUES('"+this.codigo+"','"+this.nombre+"','"+this.categoria+"',"+this.cantidad+","+this.precio+");";
+        System.out.println(sentencia);
         if (conexion.setAutoCommit(false)) {
             if (conexion.insertDB(sentencia)) {
                 conexion.CommitBD();
@@ -110,7 +111,7 @@ public class Producto {
     
     public boolean borrarProducto(int codigo){
         ConexionBD conexion = new ConexionBD();
-        String sentencia = "DELETE FROM producto WHERE id="+ codigo +";";
+        String sentencia = "DELETE FROM producto WHERE codigo="+ codigo +";";
         if (conexion.setAutoCommit(false)) {
             if (conexion.actualizartDB(sentencia)) {
                 conexion.CommitBD();
@@ -149,12 +150,13 @@ public class Producto {
         }
     }
     
-    public List<Producto> listarProductos() {
-        List<Producto> listaProductos = new ArrayList();
+    public List<Producto> listarProductos() throws SQLException{
+        List<Producto> listaProductos = new ArrayList<>();
         ConexionBD conexion = new ConexionBD();
-        String sentencia = "select * from producto";
-        try {
+        String sentencia = "select * from producto order by codigo asc";
+        System.out.println("Antes de inicializar el rs");
             ResultSet rs = conexion.consultarBD(sentencia);
+            System.out.println(rs);
             Producto p;
             while (rs.next()) {
                 p=new Producto();
@@ -165,11 +167,9 @@ public class Producto {
                 p.setPrecio(rs.getDouble("precio"));
                 listaProductos.add(p);
             }
-        } catch (SQLException ex) {
-            System.out.println("Error"+ex.getMessage());
-        }finally{
+        
             conexion.cerrarConexion();
-        }
+        
         return listaProductos;
     }
     
